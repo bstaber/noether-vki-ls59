@@ -1,0 +1,78 @@
+name: vki_upt_conditioned
+dataset_kind: noether_project.datasets.vki_ls59.DatasetVKI
+tracker: null
+datasets:
+  train:
+    kind: noether_project.datasets.vki_ls59.DatasetVKI
+    dataset_normalizers:
+      mach:
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+        strategy: mean_std
+      in_scalars:
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+        strategy: mean_std
+    dataset_folder: /home/brian/data/physarena/VKI-LS59
+    num_samples: 671
+    num_supernodes: 2048
+    split: train
+    supernode_sampling: uniform_random
+    supernode_seed: 1234
+  test:
+    kind: noether_project.datasets.vki_ls59.DatasetVKI
+    dataset_normalizers:
+      mach:
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+        strategy: mean_std
+      in_scalars:
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+        strategy: mean_std
+    dataset_folder: /home/brian/data/physarena/VKI-LS59
+    num_samples: 168
+    num_supernodes: 2048
+    split: test
+    supernode_sampling: uniform_random
+    supernode_seed: 1234
+model:
+  kind: noether_project.models.ConditionedTransolver
+  name: vki_transolver_conditioned
+  optimizer_config:
+    kind: noether.core.optimizer.Lion
+    lr: 5.0e-05
+    weight_decay: 0.05
+    clip_grad_norm: 0.25
+    schedule_config:
+      kind: noether.core.schedules.LinearWarmupCosineDecaySchedule
+      end_value: 1.0e-06
+      max_value: 5.0e-05
+      warmup_percent: 0.05
+  hidden_dim: 128
+  depth: 12
+  transformer_block_config:
+    hidden_dim: 128
+    num_heads: 4
+    mlp_hidden_dim: 512
+    mlp_expansion_factor: 4
+    attention_constructor: transolver
+    condition_dim: 2
+    attention_arguments:
+      num_slices: 32
+  attention_arguments:
+    num_slices: 32
+  position_dim: 2
+  output_dim: 1
+trainer:
+  kind: noether_project.trainer.TransolverTrainer
+  max_epochs: 100
+  add_default_callbacks: true
+  add_trainer_callbacks: false
+  effective_batch_size: 1
+  precision: bfloat16
+  callbacks: []
+  log_every_n_updates: 10
+  forward_properties:
+  - geometry_position
+  - in_scalars
+  target_properties:
+  - target_mach
+output_path: /home/brian/softs/noether_project/outputs
+config_schema_kind: noether.core.schemas.schema.ConfigSchema

@@ -1,0 +1,16 @@
+ds_stats/test/len: 168
+ds_stats/train/len: 671
+loss/online/mse/U10/last: 0.0002224981872132048
+loss/online/mse/U10/min: 9.487734496360645e-05
+loss/online/mse/U134/last: 0.0001744432665873319
+loss/online/mse/U134/min: 0.0001558519434183836
+loss/online/total/U10/last: 0.0002224981872132048
+loss/online/total/U10/min: 9.487734496360645e-05
+loss/online/total/U134/last: 0.0001744432665873319
+loss/online/total/U134/min: 0.0001558519434183836
+param_count/conditioned_transolver: 2252465
+param_count/conditioned_transolver/frozen: 0
+param_count/conditioned_transolver/trainable: 2252465
+param_count/total: 2252465
+param_count/total/frozen: 0
+param_count/total/trainable: 2252465

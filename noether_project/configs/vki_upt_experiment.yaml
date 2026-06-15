@@ -1,0 +1,126 @@
+# @package _global_
+
+dataset_kind: noether_project.datasets.vki_ls59.DatasetVKI
+
+defaults:
+  - tracker: disabled
+  - _self_
+
+name: vki_upt_conditioned
+output_path: ./outputs
+
+model:
+  kind: noether_project.models.VKIConditionedUPT
+  name: vki_upt_conditioned
+  hidden_dim: 256
+  num_heads: 8
+  mlp_expansion_factor: 4
+  approximator_depth: 12
+  use_rope: true
+  bias_layers: false
+  optimizer_config:
+    kind: torch.optim.AdamW
+    lr: 1.0e-3
+    weight_decay: 1e-4
+    clip_grad_norm: 1.0
+    schedule_config:
+      kind: noether.core.schedules.LinearWarmupCosineDecaySchedule
+      warmup_percent: 0.10
+      end_value: 1.0e-6
+      max_value: 1.0e-3
+
+  data_specs:
+    position_dim: 2
+    domains:
+      surface:
+        output_dims:
+          mach: 1
+
+  supernode_pooling_config:
+    hidden_dim: 256
+    input_dim: 2
+    k: 32
+    max_degree: 64
+    spool_pos_mode: abspos
+    aggregation: mean
+    message_mode: mlp
+
+  approximator_config:
+    hidden_dim: 256
+    num_heads: 8
+    mlp_expansion_factor: 4
+    drop_path: 0.0
+    attention_constructor: dot_product
+    use_rope: true
+    max_wavelength: 10000
+
+  decoder_config:
+    input_dim: 2
+    depth: 4
+    perceiver_block_config:
+      hidden_dim: 256
+      num_heads: 8
+      mlp_expansion_factor: 4
+      drop_path: 0.0
+      attention_constructor: perceiver
+      use_rope: true
+      max_wavelength: 10000
+      condition_dim: 2
+
+trainer:
+  kind: noether_project.trainer.VKITrainer
+  precision: bfloat16
+  max_epochs: 100
+  effective_batch_size: 1
+  log_every_n_updates: 10
+  add_default_callbacks: true
+  add_trainer_callbacks: false
+  callbacks: []
+  forward_properties:
+    - geometry_batch_idx
+    - geometry_supernode_idx
+    - geometry_position
+    - query_position
+    - in_scalars
+    - unbatch_mask_query_position
+  target_properties:
+    - target_mach
+
+datasets:
+  train:
+    kind: ${dataset_kind}
+    dataset_folder: /home/brian/data/physarena/VKI-LS59
+    num_samples: 671
+    num_supernodes: 2048
+    supernode_sampling: uniform_random
+    supernode_seed: 1234
+    split: train
+    dataset_normalizers:
+      # nodes:
+      #   kind: noether.data.preprocessors.normalizers.FieldNormalizer
+      #   strategy: mean_std
+      mach:
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+        strategy: mean_std
+      in_scalars:
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+        strategy: mean_std
+
+  test:
+    kind: ${dataset_kind}
+    dataset_folder: /home/brian/data/physarena/VKI-LS59
+    num_samples: 168
+    num_supernodes: 2048
+    supernode_sampling: uniform_random
+    supernode_seed: 1234
+    split: test
+    dataset_normalizers:
+      # nodes:
+      #   kind: noether.data.preprocessors.normalizers.FieldNormalizer
+      #   strategy: mean_std
+      mach:
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+        strategy: mean_std
+      in_scalars:
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+        strategy: mean_std

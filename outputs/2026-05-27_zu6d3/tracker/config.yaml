@@ -1,0 +1,173 @@
+run_name: vki_upt_conditioned
+stage_name: default
+hp:
+  name: vki_upt_conditioned
+  accelerator: gpu
+  stage_name: null
+  dataset_kind: noether_project.datasets.vki_ls59.DatasetVKI
+  dataset_root: null
+  resume_run_id: null
+  resume_stage_name: null
+  resume_checkpoint: null
+  resume_output_path: null
+  seed: 0
+  dataset_statistics: null
+  tracker: null
+  run_id: null
+  devices: null
+  num_workers: null
+  cudnn_benchmark: true
+  cudnn_deterministic: false
+  datasets:
+    train:
+      kind: noether_project.datasets.vki_ls59.DatasetVKI
+      pipeline: null
+      dataset_normalizers:
+        mach:
+          kind: noether.data.preprocessors.normalizers.FieldNormalizer
+          strategy: mean_std
+          logscale: false
+          stat_keys: null
+          scale: 1000.0
+          zero_center: false
+        in_scalars:
+          kind: noether.data.preprocessors.normalizers.FieldNormalizer
+          strategy: mean_std
+          logscale: false
+          stat_keys: null
+          scale: 1000.0
+          zero_center: false
+      dataset_wrappers: null
+      included_properties: null
+      excluded_properties: null
+      dataset_folder: /home/brian/data/physarena/VKI-LS59
+      num_samples: 671
+      num_supernodes: 2048
+      split: train
+      supernode_sampling: uniform_random
+      supernode_seed: 1234
+    test:
+      kind: noether_project.datasets.vki_ls59.DatasetVKI
+      pipeline: null
+      dataset_normalizers:
+        mach:
+          kind: noether.data.preprocessors.normalizers.FieldNormalizer
+          strategy: mean_std
+          logscale: false
+          stat_keys: null
+          scale: 1000.0
+          zero_center: false
+        in_scalars:
+          kind: noether.data.preprocessors.normalizers.FieldNormalizer
+          strategy: mean_std
+          logscale: false
+          stat_keys: null
+          scale: 1000.0
+          zero_center: false
+      dataset_wrappers: null
+      included_properties: null
+      excluded_properties: null
+      dataset_folder: /home/brian/data/physarena/VKI-LS59
+      num_samples: 168
+      num_supernodes: 2048
+      split: test
+      supernode_sampling: uniform_random
+      supernode_seed: 1234
+  model:
+    kind: noether_project.models.ConditionedTransolver
+    name: vki_transolver_conditioned
+    optimizer_config:
+      kind: torch.optim.AdamW
+      lr: 0.0001
+      weight_decay: 0.0001
+      clip_grad_value: null
+      clip_grad_norm: 1.0
+      param_group_modifiers_config: null
+      exclude_bias_from_weight_decay: true
+      exclude_normalization_params_from_weight_decay: true
+      weight_decay_schedule: null
+      schedule_config:
+        kind: noether.core.schedules.LinearWarmupCosineDecaySchedule
+        overhang_percent: null
+        overhang_steps: null
+        start_value: 0.0
+        end_value: 1.0e-06
+        weight_decay: 0.0
+        start_percent: null
+        end_percent: null
+        start_step: null
+        end_step: null
+        interval: update
+        max_value: 0.0001
+        warmup_steps: null
+        warmup_percent: 0.1
+      betas: null
+    initializers: null
+    is_frozen: false
+    forward_properties: {}
+    hidden_dim: 128
+    depth: 12
+    transformer_block_config:
+      hidden_dim: 128
+      num_heads: 4
+      mlp_hidden_dim: 512
+      mlp_expansion_factor: 4
+      drop_path: 0.0
+      attention_constructor: transolver
+      layerscale: null
+      condition_dim: 2
+      bias: true
+      eps: 1.0e-06
+      init_weights: truncnormal002
+      use_rope: false
+      max_wavelength: 10000
+      attention_arguments:
+        num_slices: 32
+    attention_arguments:
+      num_slices: 32
+    position_dim: 2
+    output_dim: 1
+  trainer:
+    kind: noether_project.trainer.TransolverTrainer
+    max_epochs: 100
+    max_updates: null
+    max_samples: null
+    start_at_epoch: null
+    add_default_callbacks: true
+    add_trainer_callbacks: false
+    effective_batch_size: 1
+    precision: bfloat16
+    callbacks: {}
+    initializer: null
+    log_every_n_epochs: null
+    log_every_n_updates: 10
+    log_every_n_samples: null
+    track_every_n_epochs: null
+    track_every_n_updates: null
+    track_every_n_samples: null
+    max_batch_size: null
+    skip_nan_loss: false
+    skip_nan_loss_max_count: 100
+    disable_gradient_accumulation: true
+    save_on_sigint: false
+    use_torch_compile: false
+    find_unused_params: false
+    static_graph: false
+    forward_properties:
+      '0': geometry_position
+      '1': in_scalars
+    target_properties:
+      '0': target_mach
+    dataloader_prefetch_factor: null
+    monitor_training_stability: false
+    monitor_interval: 1
+  debug: false
+  store_code_in_output: true
+  output_path: /home/brian/softs/noether_project/outputs
+  overwrite_output: false
+  master_port: 22320
+  slurm: null
+accelerator: NVIDIA GeForce RTX 4080 SUPER
+dist/world_size: '1'
+dist/nodes: '1'
+dist/hostname: BribriDu92

@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=76.1.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "noether_project"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "emmiai-noether",
+    "pyplaid>=0.1.15",
+]
+
+[tool.setuptools.packages.find]
+include = ["noether_project*"]
+exclude = ["outputs*"]
+
+[tool.uv.sources]
+emmiai-noether = { git = "https://github.com/Emmi-AI/noether.git" }
