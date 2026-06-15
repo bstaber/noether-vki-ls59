@@ -1,5 +1,7 @@
 ### Noether applied to VKI-LS59 dataset (see [here](https://huggingface.co/datasets/PhysArena/VKI-LS59))
 
+Simple example of usage of the [noether library](https://github.com/Emmi-AI/noether/). I used the scaffold mecanism to create a project.
+
 I added:
 - a dataset class: `noether_project/datasets/vki_ls59.py` that loads samples from the VKI-LS59 through the the PLAID library
 - a conditioned transolver model: `noether_project/models/conditioned_transolver.py`
