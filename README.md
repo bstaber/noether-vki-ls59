@@ -5,7 +5,7 @@ I added:
 - a conditioned transolver model: `noether_project/models/conditioned_transolver.py`
 - a conditioned UPT model: `noether_project/models/conditioned_upt.py` but not tested
 - UPT and Transolver trainers in `noether_project/trainer/base.py`
-- two scripts that download the dataset and compute some statistics in `noether_project/scripts/`
+- two scripts that download the dataset and compute some statistics in `scripts/`
 
 I mostly trained the Transolver model to check if I could reproduce the results obtained with, e.g., PhysicsNemo.
 
