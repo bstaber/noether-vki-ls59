@@ -1,2 +1,0 @@
-emmiai-noether
-pyplaid>=0.1.15
